@@ -1,0 +1,78 @@
+// lab 3
+// zad 1
+
+select imie, nazwisko, data_urodzenia from pracownik;
+
+// zad 2
+
+select imie, nazwisko, YEAR(curdate()) - YEAR(data_urodzenia) as wiek
+from pracownik;
+
+// zad 3
+
+select dzial.nazwa as nazwa_dzialu,
+COUNT(pracownik.id_pracownika) as
+liczba_pracownikow FROM dzial
+LEFT JOIN pracownik ON dzial.id_dzialu =
+pracownik.dzial GROUP BY dzial.nazwa;
+
+// zad 4
+
+select kategoria.nazwa_kategori as nazwa_kategorii,
+COUNT(towar.id_towaru) as liczba_produktow
+FROM kategoria
+LEFT JOIN towar ON kategoria.id_kategori = towar.kategoria
+GROUP BY kategoria.nazwa_kategori;
+
+// zad 5
+
+select k.nazwa_kategori as nazwa_kateogri,
+GROUP_CONCAT(t.nazwa_towaru) as lista_produktow
+FROM kategoria k
+LEFT JOIN towar t ON k.id_kategori = t.kategoria
+GROUP BY k.nazwa_kategori;
+
+// zad 6
+
+select ROUND(AVG(pensja), 2) as
+srednie_zarobki
+FROM pracownik;
+
+// zad 7
+
+select ROUND(AVG(pensja), 2) as
+srednie_zarobki
+FROM pracownik
+WHERE DATEDIFF(curdate(), data_zatrudnienia) >= 1825;
+
+// zad 8
+
+select t.nazwa_towaru, sum(pz.ilosc)
+from towar t inner join pozycja_zamowienia pz
+on t.id_towaru=pz.towar
+group by t.nazwa_towaru
+order by 2 DESC limit 10;
+
+// 2 sposob
+
+select t.nazwa_towaru, count(pz.id_pozycji)
+from towar t inner join pozycja_zamowienia pz
+on t.id_towaru=pz.towar
+group by t.nazwa_towaru
+order by 2 DESC limit 10;
+
+// zad 9
+
+select z.numer_zamowienia, sum(pz.ilosc * pz.cena) as wartosc
+from zamowienie z
+inner join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie
+where year(z.data_zamowienia)=2017 
+and quarter(z.data_zamowienia)=1
+group by z.id_zamowienia;
+
+// zad 10 
+
+
+
+
+
