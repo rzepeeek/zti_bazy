@@ -1,0 +1,24 @@
+// lab 3 DRUGA CZESC
+
+// cascadowe
+
+select year(z.data_zamowienia) as rok,
+month(z.data_zamowienia) as miesiac, sum(pz.ilosc * pz.cena) as wartosc
+from zamowienie z
+inner join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie
+group by year(z.data_zamowienia), month(z.data_zamowienia);
+
+// zad 1
+
+select d.nazwa, min(p.pensja), max(p.pensja), avg(p.pensja)
+pracownik p inner join dzial d on p.dzial=d.id_dzialu
+group by d.id_dzialu;
+
+// zad 2
+
+select k.pelna_nazwa, z.numer_zamowienia, sum(pz.ilosc * pz.cena) as wartosc
+from zamowienie z
+inner join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie
+inner join klient k on k.id_klienta=z.klient
+group by z.id_zamowienia
+order by wartosc desc limit 10;
