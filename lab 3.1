@@ -23,6 +23,74 @@ inner join klient k on k.id_klienta=z.klient
 group by z.id_zamowienia
 order by wartosc desc limit 10;
 
+// zad 2
+select imie, nazwisko, data_urodzenia,
+year(curdate()) - year(data_urodzenia)
+from pracownik;
+
+// zad 3
+
+select d.nazwa, count(p.id_pracownika)
+from dzial d inner join pracownik p
+on d.id_dzialu=p.dzial group by d.id_dzialu;
+
+// zad 4
+
+select k.nazwa_kategori, count(t.id_towaru)
+from towar t inner join kategoria k on
+t.kategoria=k.id_kategori
+group by k.id_kategori;
+
+// zad 5
+
+select k.nazwa_kategori, 
+group_concat(t.nazwa_towaru)
+from kategoria k inner join towar t on t.kategoria=k.id_kategori
+group by k.id_kategori;
+
+// zad 6
+
+select round(avg(pensja), 2)
+from pracownik;
+
 // zad 7
 
+select round(avg(pensja), 2) from pracownik
+where data_zatrudnienia <= '2019-01-11';
+select round(avg(pensja), 2) from pracownik
+where data_zatrudnienia <= 
+subdate(data_zatrudnienia, interval 5 year);
+
+// zad 8
+
+# największa suma z ilosci w pozycjach zamowienia
+select t.nazwa_towaru, p.towar, sum(p.ilosc)
+from towar t inner join pozycja_zamowienia p
+on t.id_towaru=p.towar group by p.towar
+order by sum(p.ilosc) desc limit 10;
+# zliczając ilość wystąpień danego towaru na pozycji
+# zamówienia
+select t.nazwa_towaru, count(p.towar)
+from towar t inner join pozycja_zamowienia p
+on t.id_towaru=p.towar group by p.towar
+order by count(p.towar) desc limit 10;
+
+// zad 9
+
+select z.id_zamowienia, z.numer_zamowienia, 
+sum(pz.ilosc*pz.cena)
+from zamowienie z inner join pozycja_zamowienia pz
+on z.id_zamowienia=pz.zamowienie
+where quarter(z.data_zamowienia)=1
+and year(z.data_zamowienia)=2017
+group by z.id_zamowienia;
+
+// zad 10
+
+select pr.imie, pr.nazwisko, 
+sum(pz.ilosc*pz.cena) as wartosc
+from zamowienie z inner join pozycja_zamowienia pz
+on z.id_zamowienia=pz.zamowienie
+inner join pracownik pr on pr.id_pracownika=z.pracownik_id_pracownika 
+group by pr.id_pracownika order by wartosc desc;
 
